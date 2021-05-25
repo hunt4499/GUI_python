@@ -1,7 +1,9 @@
 import PySimpleGUI as sg  
 import os.path 
+import time
+import calendar
 
-file_list_column=[[sg.Text("Hello There"),sg.In(size=(25,1),enable_events=True,key='-FOLDER-'),sg.FolderBrowse()],
+file_list_column=[[sg.Text("Image Viewer"),sg.In(size=(25,1),enable_events=True,key='-FOLDER-'),sg.FolderBrowse()],[sg.Button("TimeStamp")],[sg.Text("TimeStamp Viewer"),sg.In(size=(25,1),enable_events=True,key='-TIMESTAMP-')],
                   [sg.Listbox(values=[],enable_events=True,size=(40,20),key='-FILE LIST-')]]
 
 
@@ -9,7 +11,7 @@ image_viewer_column=[[sg.Text("Please select image from the left")],[sg.Text(siz
                      [sg.Image(key='IMAGE')]]
 
 layout=[[sg.Column(file_list_column),sg.VSeperator(),sg.Column(image_viewer_column)]]
-window=sg.Window('Hello World',layout)
+window=sg.Window('Image Viewer plus TimeStamp',layout)
 
 while True:
     event,values=window.read()
@@ -40,5 +42,14 @@ while True:
             window['IMAGE'].update(filename=filename)
         except:
             print(filename)
+            pass
+    elif event=='TimeStamp':
+        print("INSIDE")
+        try:
+            gmt = time.gmtime()
+            ts = calendar.timegm(gmt)
+            window['-TIMESTAMP-'].update(str(ts))
+        except Exception as e:
+            print(e)
             pass
 window.close()
